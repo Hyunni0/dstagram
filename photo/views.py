@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import Photo
+#from django.views.generic import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.detail import DetailView
+from django.contrib.auth import get_user_model
+
+
 
 
 # Create your views here.
@@ -11,9 +16,16 @@ def photo_list(request):
     photos = Photo.objects.all()
     return render(request, 'photo/list.html', {'photos': photos})
 
+'''
+class PhotoListView(ListView):
+    model = Photo
+    template_name = 'photo/list.html'
+    context_object_name = 'photos'
+'''
+
 class PhotoUploadView(LoginRequiredMixin, CreateView):
     model = Photo
-    fields =['photo', 'text']
+    fields = ['photo', 'text']
     template_name = 'photo/upload.html'
 
     def form_valid(self, form):
@@ -33,3 +45,8 @@ class PhotoUpdateView(LoginRequiredMixin, UpdateView):
     model = Photo
     fields = ['photo', 'text']
     template_name = 'photo/update.html'
+
+class UserProfileView(LoginRequiredMixin, DetailView):
+    model = get_user_model()
+    template_name = 'photo/profile.html'
+    context_object_name = 'user_object'

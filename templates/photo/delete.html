@@ -19,11 +19,24 @@
         {{form.as_p}}
         {% csrf_token %}
         <input type="submit" class="btn btn-danger" value="Confirm">
+         <a href="{% url 'photo:photo_detail' pk=object.id  %}" class="btn btn-secondary">Cancel</a>
       </form>
     </div>
   <div class="col-md-2"></div>
 </div>
+
 {% endblock %}
 
 </body>
+{% block script %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const cancelButton = document.querySelector('a[href*="photo:photo_detail"]');
+      cancelButton.addEventListener('click', function() {
+        const refererUrl = window.location.href;
+        sessionStorage.setItem('referer_url', refererUrl);
+      });
+    });
+  </script>
+{% endblock %}
 </html>
